@@ -45,8 +45,7 @@
 enum  {
   BLINK_NOT_MOUNTED = 250,
   BLINK_MOUNTED = 1000,
-  BLINK_SUSPENDED = 2500,
-  BLINK_ERROR = 10000
+  BLINK_SUSPENDED = 2500
 };
 
 static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
@@ -161,11 +160,8 @@ static void send_hid_report(uint8_t report_id, uint32_t btn)
 {
   // skip if hid is not ready yet
   if ( !tud_hid_ready() ) {
-      blink_interval_ms = BLINK_ERROR;
       return;
   }
-
-  blink_interval_ms = BLINK_MOUNTED;
 
   switch(report_id)
   {
