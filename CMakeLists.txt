@@ -15,6 +15,7 @@ set(FAMILY rp2040)
 set(BOARD pico_sdk)
 set(TINYUSB_FAMILY_PROJECT_NAME_PREFIX "tinyusb_dev_")
 
+include(${PICO_SDK_PATH}/lib/tinyusb/hw/bsp/family_support.cmake)
 include(${PICO_SDK_PATH}/lib/tinyusb/hw/bsp/${FAMILY}/family.cmake)
 
 
@@ -26,7 +27,7 @@ project(${PROJECT})
 # Checks this example is valid for the family and initializes the project
 family_initialize_project(${PROJECT} ${CMAKE_CURRENT_LIST_DIR})
 
-add_executable(${PROJECT} src/data_protocol.h)
+add_executable(${PROJECT} src/main.c src/data_protocol.h)
 
 # Example source
 target_sources(${PROJECT} PUBLIC
