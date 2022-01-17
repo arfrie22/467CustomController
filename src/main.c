@@ -170,22 +170,22 @@ static void send_hid_report(uint8_t report_id, uint32_t btn)
       // use to avoid send multiple consecutive zero report for keyboard
       static bool has_gamepad_key = false;
 
-      hid_gamepad_report_t report =
+      hid_controller_report_t report =
       {
         .x   = 0, .y = 0, .z = 0, .rz = 0, .rx = 0, .ry = 0,
-        .hat = 0, .buttons = 0
+        .hats = 0, .buttons = 0
       };
 
       if ( btn )
       {
-        report.hat = GAMEPAD_HAT_UP;
-        report.buttons = GAMEPAD_BUTTON_A;
+        report.hats = GAMEPAD_HAT_UP;
+        report.buttons = 0xFFFFFFFF;
         tud_hid_report(REPORT_ID_GAMEPAD, &report, sizeof(report));
 
         has_gamepad_key = true;
       }else
       {
-        report.hat = GAMEPAD_HAT_CENTERED;
+        report.hats = GAMEPAD_HAT_CENTERED;
         report.buttons = 0;
         if (has_gamepad_key) tud_hid_report(REPORT_ID_GAMEPAD, &report, sizeof(report));
         has_gamepad_key = false;
