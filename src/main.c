@@ -38,6 +38,7 @@
 #include "hardware/clocks.h"
 #include "led.h"
 #include "data_protocol.h"
+#include "config.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
@@ -207,8 +208,16 @@ void cdc_task(void) {
                     break;
                 }
 
+                case id_get_team_number: {
+                    command_data[0] = (TEAM_NUMBER >> 24) & 0xFF;
+                    command_data[1] = (TEAM_NUMBER >> 16) & 0xFF;
+                    command_data[2] = (TEAM_NUMBER >> 8) & 0xFF;
+                    command_data[3] = TEAM_NUMBER & 0xFF;
+                    break;
+                }
+
                 case id_enter_bootloader: {
-                    tud_cdc_write(buf, count);
+                    tud_cdc_write(buf, sizeof(buf));
                     tud_cdc_write_flush();
                     reset_usb_boot(0, 0);
                     break;
@@ -220,7 +229,7 @@ void cdc_task(void) {
                 }
             }
 
-            tud_cdc_write(buf, count);
+            tud_cdc_write(buf, sizeof(buf));
             tud_cdc_write_flush();
         }
     }

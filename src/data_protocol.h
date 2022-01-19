@@ -11,6 +11,7 @@ enum data_command_id {
 
 
     //...
+    id_get_team_number = 0xFD,
     id_enter_bootloader = 0xFE,
     id_error = 0xFF
 };
