@@ -27,12 +27,14 @@ project(${PROJECT})
 # Checks this example is valid for the family and initializes the project
 family_initialize_project(${PROJECT} ${CMAKE_CURRENT_LIST_DIR})
 
-add_executable(${PROJECT} src/main.c src/data_protocol.h)
+add_executable(${PROJECT} src/main.c src/usb_descriptors.c src/data_protocol.h src/led.c src/led.h)
 
 # Example source
 target_sources(${PROJECT} PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/usb_descriptors.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/led.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/led.h
         )
 
 # Example include

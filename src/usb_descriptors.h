@@ -25,10 +25,9 @@
 #ifndef USB_DESCRIPTORS_H_
 #define USB_DESCRIPTORS_H_
 
-enum
-{
-  REPORT_ID_GAMEPAD = 1,
-  REPORT_ID_COUNT
+enum {
+    REPORT_ID_GAMEPAD = 1,
+    REPORT_ID_COUNT
 };
 
 // Gamepad Report Descriptor Template
@@ -90,16 +89,15 @@ enum
     HID_COLLECTION_END                                          ,\
   HID_COLLECTION_END \
 
-typedef struct TU_ATTR_PACKED
-{
+typedef struct TU_ATTR_PACKED {
     uint32_t buttons;  ///< Buttons mask for currently pressed buttons
     uint8_t hats;       ///< Buttons mask for currently pressed buttons in the DPad/hat
-    int16_t  x;         ///< Delta x  movement of left analog-stick
-    int16_t  y;         ///< Delta y  movement of left analog-stick
-    int16_t  z;         ///< Delta z  movement of right analog-joystick
-    int16_t  rz;        ///< Delta Rz movement of right analog-joystick
-    int16_t  rx;        ///< Delta Rx movement of analog left trigger
-    int16_t  ry;        ///< Delta Ry movement of analog right trigger
-}hid_controller_report_t;
+    int16_t x;         ///< Delta x  movement of left analog-stick
+    int16_t y;         ///< Delta y  movement of left analog-stick
+    int16_t z;         ///< Delta z  movement of right analog-joystick
+    int16_t rz;        ///< Delta Rz movement of right analog-joystick
+    int16_t rx;        ///< Delta Rx movement of analog left trigger
+    int16_t ry;        ///< Delta Ry movement of analog right trigger
+} hid_controller_report_t;
 
 #endif /* USB_DESCRIPTORS_H_ */
