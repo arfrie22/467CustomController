@@ -138,6 +138,7 @@ void cdc_task(void) {
                 case id_get_protocol_version: {
                     command_data[0] = COMMAND_PROTOCOL_VERSION >> 8;
                     command_data[1] = COMMAND_PROTOCOL_VERSION & 0xFF;
+                    count += 2;
                     break;
                 }
 
@@ -150,11 +151,13 @@ void cdc_task(void) {
                     switch (command_data[0]) {
                         case id_led_count: {
                             command_data[1] = LED_COUNT;
+                            count += 1;
                             break;
                         }
 
                         case id_section_count: {
                             command_data[1] = SECTION_COUNT;
+                            count += 1;
                             break;
                         }
 
@@ -213,6 +216,7 @@ void cdc_task(void) {
                     command_data[1] = (TEAM_NUMBER >> 16) & 0xFF;
                     command_data[2] = (TEAM_NUMBER >> 8) & 0xFF;
                     command_data[3] = TEAM_NUMBER & 0xFF;
+                    count += 4;
                     break;
                 }
 
@@ -229,7 +233,7 @@ void cdc_task(void) {
                 }
             }
 
-            tud_cdc_write(buf, sizeof(buf));
+            tud_cdc_write(buf, count);
             tud_cdc_write_flush();
         }
     }
