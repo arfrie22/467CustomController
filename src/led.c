@@ -21,7 +21,7 @@ static const uint8_t led_gamma[] = { // Brightness ramp for LEDs
 // WS2812
 
 static inline void put_pixel(uint32_t pixel_grb) {
-    pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
+    pio_sm_put_blocking(pio1, 0, pixel_grb << 8u);
 }
 
 static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b) {
@@ -224,7 +224,7 @@ void ws2812_init(void)
     puts("WS2812 Smoke Test");
 
     // todo get free sm
-    PIO pio = pio0;
+    PIO pio = pio1;
     int sm = 0;
     uint offset = pio_add_program(pio, &ws2812_program);
 

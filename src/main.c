@@ -39,6 +39,7 @@
 #include "led.h"
 #include "data_protocol.h"
 #include "config.h"
+#include "encoder.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
@@ -68,6 +69,8 @@ int main(void) {
     board_init();
     tusb_init();
     ws2812_init();
+    encoder_init(20);
+    encoder_set_rotation(0);
 
     unsigned short l = 0;
     unsigned int t = 0;
@@ -260,44 +263,6 @@ void tud_cdc_rx_cb(uint8_t itf) {
 //--------------------------------------------------------------------+
 // USB HID
 //--------------------------------------------------------------------+
-
-static void send_hid_report(uint8_t report_id, uint32_t btn) {
-    // skip if hid is not ready yet
-    if (!tud_hid_ready()) {
-        return;
-    }
-
-    switch (report_id) {
-        case REPORT_ID_GAMEPAD: {
-            // use to avoid send multiple consecutive zero report for keyboard
-            static bool has_gamepad_key = false;
-
-            hid_controller_report_t report =
-                    {
-                            .x   = 0, .y = 0, .z = 0, .rz = 0, .rx = 0, .ry = 0,
-                            .hats = 0, .buttons = 0
-                    };
-
-            if (btn) {
-                report.hats = GAMEPAD_HAT_UP;
-                report.buttons = 0xFFFFFFFF;
-                tud_hid_report(REPORT_ID_GAMEPAD, &report, sizeof(report));
-
-                has_gamepad_key = true;
-            } else {
-                report.hats = GAMEPAD_HAT_CENTERED;
-                report.buttons = 0;
-                if (has_gamepad_key) tud_hid_report(REPORT_ID_GAMEPAD, &report, sizeof(report));
-                has_gamepad_key = false;
-            }
-        }
-            break;
-
-        default:
-            break;
-    }
-}
-
 // Every 10ms, we will sent 1 report for each HID profile (keyboard, mouse etc ..)
 // tud_hid_report_complete_cb() is used to send the next report after previous one is complete
 void hid_task(void) {
@@ -316,8 +281,36 @@ void hid_task(void) {
         // and REMOTE_WAKEUP feature is enabled by host
         tud_remote_wakeup();
     } else {
-        // Send the 1st of report chain, the rest will be sent by tud_hid_report_complete_cb()
-        send_hid_report(REPORT_ID_GAMEPAD, btn);
+        // skip if hid is not ready yet
+        if (!tud_hid_ready()) {
+            return;
+        }
+
+        hid_controller_report_t report =
+                {
+                        .x   = 0, .y = 0, .z = 0, .rz = 0, .rx = 0, .ry = 0,
+                        .hats = 0, .buttons = 0
+                };
+
+        uint8_t hat1 = 8;
+        uint8_t hat2 = 8;
+
+        if (btn) {
+            hat1 = GAMEPAD_HAT_UP;
+            hat2 = GAMEPAD_HAT_UP_RIGHT;
+            report.buttons = 0xFFFFFFFF;
+            inc_encoder(); // TODO yolo
+            report.x = encoder_16_bit();
+
+        } else {
+            report.buttons = 0;
+            dec_encoder();
+            report.x = encoder_16_bit();
+        }
+
+        report.hats = hat1 << 4 | (hat2 & 0x0F);
+
+        tud_hid_report(REPORT_ID_GAMEPAD, &report, sizeof(report));
     }
 }
 
@@ -329,10 +322,6 @@ void tud_hid_report_complete_cb(uint8_t instance, uint8_t const *report, uint8_t
     (void) len;
 
     uint8_t next_report_id = report[0] + 1;
-
-    if (next_report_id < REPORT_ID_COUNT) {
-        send_hid_report(next_report_id, board_button_read());
-    }
 }
 
 // Invoked when received GET_REPORT control request

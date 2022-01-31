@@ -27,7 +27,7 @@ project(${PROJECT})
 # Checks this example is valid for the family and initializes the project
 family_initialize_project(${PROJECT} ${CMAKE_CURRENT_LIST_DIR})
 
-add_executable(${PROJECT} src/main.c src/usb_descriptors.c src/data_protocol.h src/led.c src/led.h src/config.h)
+add_executable(${PROJECT} src/main.c src/usb_descriptors.c src/data_protocol.h src/led.c src/led.h src/config.h src/encoder.c src/encoder.h)
 
 # Example source
 target_sources(${PROJECT} PUBLIC
@@ -35,6 +35,8 @@ target_sources(${PROJECT} PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/usb_descriptors.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/led.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/led.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/encoder.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/encoder.h
         )
 
 # Example include
@@ -49,7 +51,8 @@ family_configure_device_example(${PROJECT})
 
 # generate the header file into the source tree as it is included in the RP2040 datasheet
 #pico_generate_pio_header(${PROJECT} ${CMAKE_CURRENT_LIST_DIR}/src/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/src/generated)
-target_link_libraries(${PROJECT} PUBLIC pico_stdlib hardware_pio hardware_dma)
+#pico_generate_pio_header(${PROJECT} ${CMAKE_CURRENT_LIST_DIR}/src/pio_rotary_encoder.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/src/generated)
+target_link_libraries(${PROJECT} PUBLIC pico_stdlib hardware_pio hardware_dma hardware_irq)
 
 #add_executable(467CustomController src/main.c src/usb_descriptors.c src/usb_descriptors.h src/tusb_config.h)
 #

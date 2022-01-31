@@ -100,4 +100,5 @@ typedef struct TU_ATTR_PACKED {
     int16_t ry;        ///< Delta Ry movement of analog right trigger
 } hid_controller_report_t;
 
+
 #endif /* USB_DESCRIPTORS_H_ */
