@@ -145,6 +145,15 @@ void cdc_task(void) {
                     break;
                 }
 
+                case id_get_team_number: {
+                    command_data[0] = (TEAM_NUMBER >> 24) & 0xFF;
+                    command_data[1] = (TEAM_NUMBER >> 16) & 0xFF;
+                    command_data[2] = (TEAM_NUMBER >> 8) & 0xFF;
+                    command_data[3] = TEAM_NUMBER & 0xFF;
+                    count += 4;
+                    break;
+                }
+
                 case id_get_controller_state: {
                     //TODO Imp
                     break;
@@ -214,12 +223,10 @@ void cdc_task(void) {
                     break;
                 }
 
-                case id_get_team_number: {
-                    command_data[0] = (TEAM_NUMBER >> 24) & 0xFF;
-                    command_data[1] = (TEAM_NUMBER >> 16) & 0xFF;
-                    command_data[2] = (TEAM_NUMBER >> 8) & 0xFF;
-                    command_data[3] = TEAM_NUMBER & 0xFF;
-                    count += 4;
+                case id_get_port_name: {
+                    const char *data = get_string_desc()[4];
+                    strcpy(command_data, data);
+                    count += strlen(data);
                     break;
                 }
 

@@ -251,6 +251,10 @@ char const *string_desc_arr[] =
                 "Controller HID",               // 4: HID Interface
         };
 
+const char** get_string_desc() {
+    return string_desc_arr;
+}
+
 static uint16_t _desc_str[32];
 
 // Invoked when received GET STRING DESCRIPTOR request

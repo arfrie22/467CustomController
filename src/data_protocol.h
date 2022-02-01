@@ -4,14 +4,15 @@
 
 enum data_command_id {
     id_get_protocol_version = 0x01,
-    id_get_controller_state = 0x02,
-    id_get_led_data = 0x03,
-    id_get_led = 0x04,
-    id_set_led = 0x05,
+    id_get_team_number = 0x02,
+    id_get_controller_state = 0x03,
+    id_get_led_data = 0x04,
+    id_get_led = 0x05,
+    id_set_led = 0x06,
 
 
     //...
-    id_get_team_number = 0xFD,
+    id_get_port_name = 0xFD,
     id_enter_bootloader = 0xFE,
     id_error = 0xFF
 };
