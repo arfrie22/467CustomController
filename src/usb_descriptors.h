@@ -32,6 +32,31 @@ enum {
     REPORT_ID_COUNT
 };
 
+#define HID_USAGE_PAGE_CONST 0x05
+#define HID_USAGE_CONST 0x09
+#define HID_COLLECTION_CONST 0xA1
+#define HID_REPORT_ID_CONST 0x85
+#define HID_USAGE_MIN_CONST 0x19
+#define HID_USAGE_MAX_CONST 0x29
+#define HID_LOGICAL_MIN_CONST 0x15
+#define HID_LOGICAL_MAX_CONST 0x25
+#define HID_PHYSICAL_MIN_CONST 0x35
+#define HID_PHYSICAL_MAX_CONST 0x45
+#define HID_REPORT_SIZE_CONST 0x75
+#define HID_REPORT_COUNT_CONST 0x95
+#define HID_UNIT_EXPONENT_CONST 0x55
+#define HID_UNIT_CONST 0x65
+#define HID_INPUT_CONST 0x81
+
+#define HID_ANGULAR_POSITION 0x14
+
+#define HID_USAGE_SIMULATE_RUDDER 0xBA
+#define HID_USAGE_SIMULATE_THROTTLE 0xBB
+#define HID_USAGE_SIMULATE_ACCELERATE 0xC4
+#define HID_USAGE_SIMULATE_BRAKE 0xC5
+#define HID_USAGE_SIMULATE_STEERING 0xC8
+
+
 // Gamepad Report Descriptor Template
 // with 16 buttons, 2 joysticks and 1 hat/dpad with following layout
 // | X | Y | Z | Rz | Rx | Ry (1 byte each) | hat/DPAD (1 byte) | Button Map (2 bytes) |

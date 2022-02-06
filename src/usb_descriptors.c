@@ -25,6 +25,7 @@
 
 #include "tusb.h"
 #include "usb_descriptors.h"
+#include "input.h"
 
 /* A combination of interfaces must have a unique product id, since PC will save device driver after the first plug.
  * Same VID/PID with different interface e.g MSC (first), then CDC (later) will possibly cause system error on PC.
@@ -76,16 +77,258 @@ uint8_t const *tud_descriptor_device_cb(void) {
 // HID Report Descriptor
 //--------------------------------------------------------------------+
 
-uint8_t const desc_hid_report[] =
-        {
-                TUD_HID_REPORT_DESC_CONTROLLER (HID_REPORT_ID(REPORT_ID_GAMEPAD))
-        };
+uint8_t desc_hid_report[HID_REPORT_DESC_LENGTH];
+bool hid_report_init = false;
 
 // Invoked when received GET HID REPORT DESCRIPTOR
 // Application return pointer to descriptor
 // Descriptor contents must exist long enough for transfer to complete
 uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) {
     (void) instance;
+    if (!hid_report_init) {
+        uint8_t report_desc_count = 0;
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_DESKTOP;
+
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_JOYSTICK;
+
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_CONST;
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_APPLICATION;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_ID_CONST;
+        desc_hid_report[report_desc_count++] = REPORT_ID_GAMEPAD;
+
+#if BUTTON_COUNT
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_BUTTON;
+
+        desc_hid_report[report_desc_count++] = HID_USAGE_MIN_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_USAGE_MAX_CONST;
+        desc_hid_report[report_desc_count++] = BUTTON_COUNT;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MIN_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MAX_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = BUTTON_COUNT;
+
+        desc_hid_report[report_desc_count++] = HID_UNIT_EXPONENT_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_UNIT_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_DATA | HID_VARIABLE | HID_ABSOLUTE;
+
+#if HAS_BUTTON_PADDING
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = BUTTON_PADDING;
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_CONSTANT | HID_VARIABLE | HID_ABSOLUTE;
+#endif //HAS_BUTTON_PADDING
+#endif //BUTTON_COUNT
+
+#if HAT_COUNT | AXIS_COUNT
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_DESKTOP;
+#endif //HAT_COUNT | AXIS_COUNT
+
+#if HAT_COUNT
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_HAT_SWITCH;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MIN_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MAX_CONST;
+        desc_hid_report[report_desc_count++] = 0x07;
+
+        desc_hid_report[report_desc_count++] = HID_PHYSICAL_MIN_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_PHYSICAL_MAX_CONST + 1;
+        desc_hid_report[report_desc_count++] = 0x3B;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_UNIT_CONST;
+        desc_hid_report[report_desc_count++] = HID_ANGULAR_POSITION;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x04;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_DATA | HID_VARIABLE | HID_ABSOLUTE;
+
+#if HAT_COUNT > 1
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_HAT_SWITCH;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MIN_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MAX_CONST;
+        desc_hid_report[report_desc_count++] = 0x07;
+
+        desc_hid_report[report_desc_count++] = HID_PHYSICAL_MIN_CONST;
+        desc_hid_report[report_desc_count++] = 0x00;
+
+        desc_hid_report[report_desc_count++] = HID_PHYSICAL_MAX_CONST;
+        desc_hid_report[report_desc_count++] = 0x3B;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_UNIT_CONST;
+        desc_hid_report[report_desc_count++] = HID_ANGULAR_POSITION;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x04;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_DATA | HID_VARIABLE | HID_ABSOLUTE;
+#else
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x01;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = 0x04;
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_CONSTANT | HID_VARIABLE | HID_ABSOLUTE;
+#endif //HAT_COUNT > 1
+#endif //HAT_COUNT
+
+#if AXIS_COUNT
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_POINTER;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MIN_CONST + 1;
+        desc_hid_report[report_desc_count++] = 0x01;
+        desc_hid_report[report_desc_count++] = 0x80;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MAX_CONST + 1;
+        desc_hid_report[report_desc_count++] = 0xFF;
+        desc_hid_report[report_desc_count++] = 0x7F;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x10;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = AXIS_COUNT;
+
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_CONST;
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_PHYSICAL;
+
+#if HAS_X_AXIS
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_X;
+#endif //HAS_X_AXIS
+
+#if HAS_Y_AXIS
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_Y;
+#endif //HAS_Y_AXIS
+
+#if HAS_Z_AXIS
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_Z;
+#endif //HAS_Z_AXIS
+
+#if HAS_RX_AXIS
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_RX;
+#endif //HAS_RX_AXIS
+
+#if HAS_RY_AXIS
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_RY;
+#endif //HAS_RY_AXIS
+
+#if HAS_RZ_AXIS
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_DESKTOP_RZ;
+#endif //HAS_RZ_AXIS
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_DATA | HID_VARIABLE | HID_ABSOLUTE;
+
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_END;
+#endif //AXIS_COUNT
+
+#if SIMULATION_COUNT
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_PAGE_SIMULATE;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MIN_CONST + 1;
+        desc_hid_report[report_desc_count++] = 0x01;
+        desc_hid_report[report_desc_count++] = 0x80;
+
+        desc_hid_report[report_desc_count++] = HID_LOGICAL_MAX_CONST + 1;
+        desc_hid_report[report_desc_count++] = 0xFF;
+        desc_hid_report[report_desc_count++] = 0x7F;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_SIZE_CONST;
+        desc_hid_report[report_desc_count++] = 0x10;
+
+        desc_hid_report[report_desc_count++] = HID_REPORT_COUNT_CONST;
+        desc_hid_report[report_desc_count++] = SIMULATION_COUNT;
+
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_CONST;
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_PHYSICAL;
+
+#if HAS_RUDDER
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_SIMULATE_RUDDER;
+#endif //HAS_RUDDER
+
+#if HAS_THROTTLE
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_SIMULATE_THROTTLE;
+#endif //HAS_THROTTLE
+
+#if HAS_ACCELERATOR
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_SIMULATE_ACCELERATE;
+#endif //HAS_ACCELERATOR
+
+#if HAS_BRAKE
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_SIMULATE_BRAKE;
+#endif //HAS_BRAKE
+
+#if HAS_STEERING
+        desc_hid_report[report_desc_count++] = HID_USAGE_CONST;
+        desc_hid_report[report_desc_count++] = HID_USAGE_SIMULATE_STEERING;
+#endif //HAS_STEERING
+
+        desc_hid_report[report_desc_count++] = HID_INPUT_CONST;
+        desc_hid_report[report_desc_count++] = HID_DATA | HID_VARIABLE | HID_ABSOLUTE;
+
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_END;
+#endif //SIMULATION_COUNT
+
+        desc_hid_report[report_desc_count++] = HID_COLLECTION_END;
+        hid_report_init = true;
+    }
+
     return desc_hid_report;
 }
 

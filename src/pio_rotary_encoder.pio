@@ -41,10 +41,10 @@ read:
                  ; this represents a jmp instruction to the address A'B'AB 
     mov exec ISR ; do the jmp encoded in the ISR
 CW:              ; a clockwise rotation was detected
-    irq 0        ; signal a clockwise rotation via an IRQ
+    irq 4 rel    ; signal a clockwise rotation via an IRQ
     jmp read     ; jump to reading the current values of A and B
 CCW:             ; a counter clockwise rotation was detected
-    irq 1        ; signal a counter clockwise rotation via an IRQ
+    irq 5 rel    ; signal a counter clockwise rotation via an IRQ
 ;    jmp read    ; jump to reading the current values of A and B.
                  ; the jmp isn't needed because of the .wrap, and the first 
                  ; statement of the program happens to be a jmp read
