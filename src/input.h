@@ -3,13 +3,21 @@
 #define INPUT
 
 #include "config.h"
+#include <stdio.h>
+#include <stdbool.h>
+#include <hardware/gpio.h>
 
 #ifndef BUTTON_COUNT
 #define BUTTON_COUNT 0
 #endif //BUTTON_COUNT
 
+#if BUTTON_COUNT % 8
 #define BUTTON_PADDING (8 - (BUTTON_COUNT % 8))
-#define HAS_BUTTON_PADDING (BUTTON_COUNT % 8)
+#else
+#define BUTTON_PADDING 0
+#endif //BUTTON_COUNT % 8
+
+#define HAS_BUTTON_PADDING (BUTTON_PADDING > 0)
 
 #ifndef HAT_COUNT
 #define HAT_COUNT 0
@@ -112,8 +120,10 @@
 
 #define HID_REPORT_DESC_LENGTH HID_DESC_START_BYTES + HID_DESC_BUTTON_BYTES + HID_DESC_DESKTOP_BYTES + HID_DESC_DESC_HAT_BYTES + HID_DESC_AXIS_BYTES + HID_DESC_SIMULATION_BYTES + HID_DESC_END_BYTES
 
-
 #define HID_REPORT_LENGTH (BUTTON_COUNT / 8) + ((HAS_BUTTON_PADDING) == true) + (HAT_COUNT > 0) + (AXIS_COUNT * 2) + (SIMULATION_COUNT * 2)
+#define HAT_REPORT_INDEX ((BUTTON_COUNT + BUTTON_PADDING)/8)
 
 
+void input_init();
+void update_report(uint8_t *report);
 #endif //INPUT

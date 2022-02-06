@@ -69,40 +69,6 @@ void dec_encoder() {
     if (rotation > encoder_min) rotation -= 1;
 }
 
-static long map(long x, long in_min, long in_max, long out_min, long out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-static int16_t min(short a, short b) {
-    return b >= a ? a : b;
-}
-
-static int16_t max(int16_t a, int16_t b) {
-    return a < b ? b : a;
-}
-
-int16_t encode16BitValue(int16_t value, int16_t valueMinimum, int16_t valueMaximum, int16_t actualMinimum, int16_t actualMaximum) {
-    int16_t convertedValue;
-    int16_t realMinimum = min(valueMinimum, valueMaximum);
-    int16_t realMaximum = max(valueMinimum, valueMaximum);
-
-    if (value < realMinimum) {
-        value = realMinimum;
-    }
-    if (value > realMaximum) {
-        value = realMaximum;
-    }
-
-    if (valueMinimum > valueMaximum) {
-        // Values go from a larger number to a smaller number (e.g. 1024 to 0)
-        value = realMaximum - value + realMinimum;
-    }
-
-    convertedValue = map(value, realMinimum, realMaximum, actualMinimum, actualMaximum);
-
-    return convertedValue;
-}
-
 
 int16_t encoder_16_bit() {
     return encode16BitValue(rotation, encoder_min, encoder_max, -32767, 32767);

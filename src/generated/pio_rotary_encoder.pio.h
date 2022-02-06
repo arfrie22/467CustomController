@@ -38,9 +38,9 @@ static const uint16_t pio_rotary_encoder_program_instructions[] = {
     0x60c2, // 18: out    isr, 2                     
     0x4002, // 19: in     pins, 2                    
     0xa086, // 20: mov    exec, isr                  
-    0xc000, // 21: irq    nowait 0                   
+    0xc014, // 21: irq    nowait 4 rel               
     0x0011, // 22: jmp    17                         
-    0xc001, // 23: irq    nowait 1                   
+    0xc015, // 23: irq    nowait 5 rel               
             //     .wrap
 };
 

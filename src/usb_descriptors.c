@@ -77,7 +77,8 @@ uint8_t const *tud_descriptor_device_cb(void) {
 // HID Report Descriptor
 //--------------------------------------------------------------------+
 
-uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
+//uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
+uint8_t const desc_hid_report[] = {
         HID_USAGE_PAGE_CONST,
         HID_USAGE_PAGE_DESKTOP,
 
@@ -180,7 +181,7 @@ uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
         HID_PHYSICAL_MIN_CONST,
         0x00,
 
-        HID_PHYSICAL_MAX_CONST,
+        HID_PHYSICAL_MAX_CONST + 1,
         0x3B,
         0x01,
 
@@ -207,9 +208,10 @@ uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
 #endif //HAT_COUNT > 1
 #endif //HAT_COUNT
 
+#if AXIS_COUNT
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_POINTER,
-#if AXIS_COUNT
+
         HID_LOGICAL_MIN_CONST + 1,
         0x01,
         0x80,
@@ -227,35 +229,29 @@ uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
         HID_COLLECTION_CONST,
         HID_COLLECTION_PHYSICAL,
 
-
+#if HAS_X_AXIS
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_X,
-#if HAS_X_AXIS
 #endif //HAS_X_AXIS
-
+#if HAS_Y_AXIS
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_Y,
-#if HAS_Y_AXIS
 #endif //HAS_Y_AXIS
-
+#if HAS_Z_AXIS
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_Z,
-#if HAS_Z_AXIS
 #endif //HAS_Z_AXIS
-
+#if HAS_RX_AXIS
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_RX,
-#if HAS_RX_AXIS
 #endif //HAS_RX_AXIS
-
+#if HAS_RY_AXIS
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_RY,
-#if HAS_RY_AXIS
 #endif //HAS_RY_AXIS
-
+#if HAS_RZ_AXIS
         HID_USAGE_CONST,
         HID_USAGE_DESKTOP_RZ,
-#if HAS_RZ_AXIS
 #endif //HAS_RZ_AXIS
         HID_INPUT_CONST,
         HID_DATA | HID_VARIABLE | HID_ABSOLUTE,
@@ -264,9 +260,10 @@ uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
 
 #endif //AXIS_COUNT
 
+#if SIMULATION_COUNT
         HID_USAGE_PAGE_CONST,
         HID_USAGE_PAGE_SIMULATE,
-#if SIMULATION_COUNT
+
         HID_LOGICAL_MIN_CONST + 1,
         0x01,
         0x80,
@@ -284,30 +281,25 @@ uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
         HID_COLLECTION_CONST,
         HID_COLLECTION_PHYSICAL,
 
-
+#if HAS_RUDDER
         HID_USAGE_CONST,
         HID_USAGE_SIMULATE_RUDDER,
-#if HAS_RUDDER
 #endif //HAS_RUDDER
-
+#if HAS_THROTTLE
         HID_USAGE_CONST,
         HID_USAGE_SIMULATE_THROTTLE,
-#if HAS_THROTTLE
 #endif //HAS_THROTTLE
-
+#if HAS_ACCELERATOR
         HID_USAGE_CONST,
         HID_USAGE_SIMULATE_ACCELERATE,
-#if HAS_ACCELERATOR
 #endif //HAS_ACCELERATOR
-
+#if HAS_BRAKE
         HID_USAGE_CONST,
         HID_USAGE_SIMULATE_BRAKE,
-#if HAS_BRAKE
 #endif //HAS_BRAKE
-
+#if HAS_STEERING
         HID_USAGE_CONST,
         HID_USAGE_SIMULATE_STEERING,
-#if HAS_STEERING
 #endif //HAS_STEERING
         HID_INPUT_CONST,
         HID_DATA | HID_VARIABLE | HID_ABSOLUTE,
@@ -316,7 +308,6 @@ uint8_t const desc_hid_report[HID_REPORT_DESC_LENGTH] = {
 
 #endif //SIMULATION_COUNT
         HID_COLLECTION_END,
-
 };
 
 // Invoked when received GET HID REPORT DESCRIPTOR

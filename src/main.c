@@ -40,6 +40,7 @@
 #include "data_protocol.h"
 #include "config.h"
 #include "encoder.h"
+#include "input.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
@@ -69,6 +70,7 @@ int main(void) {
     board_init();
     tusb_init();
     ws2812_init();
+    input_init();
     encoder_init(20);
     encoder_set_rotation(0);
 
@@ -293,29 +295,8 @@ void hid_task(void) {
             return;
         }
 
-        hid_controller_report_t report =
-                {
-                        .x   = 0, .y = 0, .z = 0, .rz = 0, .rx = 0, .ry = 0,
-                        .hats = 0, .buttons = 0
-                };
-
-        uint8_t hat1 = 8;
-        uint8_t hat2 = 8;
-
-        if (btn) {
-            hat1 = GAMEPAD_HAT_UP;
-            hat2 = GAMEPAD_HAT_UP_RIGHT;
-            report.buttons = 0xFFFFFFFF;
-            inc_encoder(); // TODO yolo
-            report.x = encoder_16_bit();
-
-        } else {
-            report.buttons = 0;
-            dec_encoder();
-            report.x = encoder_16_bit();
-        }
-
-        report.hats = hat1 << 4 | (hat2 & 0x0F);
+        uint8_t report[HID_REPORT_LENGTH] = {0};
+        update_report(report);
 
         tud_hid_report(REPORT_ID_GAMEPAD, &report, sizeof(report));
     }
