@@ -47,8 +47,13 @@ jobs:
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.3.1
-    
       with:
-        name: "artifact"
-        path: "*.uf2"
+        name: dir
+        path: ${{github.workspace}}/build/
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.3.1
+      with:
+        name: artifact
+        path: ${{github.workspace}}/build/*.uf2
       
