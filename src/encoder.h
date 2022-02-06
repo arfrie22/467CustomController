@@ -7,7 +7,7 @@
 #include "hardware/pio.h"
 #include "hardware/irq.h"
 #include "data_protocol.h"
-#include "generated/pio_rotary_encoder.pio.h."
+#include "generated/pio_rotary_encoder.pio.h"
 #include <math.h>
 
 struct encoder {
