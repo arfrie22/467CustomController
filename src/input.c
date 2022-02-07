@@ -188,7 +188,7 @@ uint16_t get_x_axis() {
 }
 
 uint16_t get_y_axis() {
-    return encode_16_bit_value(0, 0, 8, -32767, 32767);
+    return encode_16_bit_value(4, 0, 8, -32767, 32767);
 }
 
 uint16_t get_z_axis() {
