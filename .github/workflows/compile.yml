@@ -3,10 +3,10 @@ name: Compile debug build
 on:
   push:
     branches: [ master ]
-    paths: src
+    paths: src/**
   pull_request:
     branches: [ master ]
-    paths: src
+    paths: src/**
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
