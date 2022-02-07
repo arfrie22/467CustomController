@@ -43,9 +43,10 @@ jobs:
         user_email: 41898282+github-actions[bot]@users.noreply.github.com
 
     - name: Commit report
+      #    git config --global user.name 'Your Name'
+      #    git config --global user.email 'your-username@users.noreply.github.com'
       run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'your-username@users.noreply.github.com'
+          git add website/
           git commit -am "Update docs for ${{github.ref_name}}"
           git push
 
