@@ -48,7 +48,7 @@ jobs:
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add website/
           git commit -am "Update docs for ${{github.ref_name}}"
-          git push
+          git push origin HEAD:main
 
     - name: Install deps
       run: sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
