@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: '467 Custom Controller',
-  tagline: 'Press button, watch robot',
+  tagline: 'Press button, watch robot go',
   url: 'https://arfrie22.github.io/',
   baseUrl: '/467CustomController/',
   onBrokenLinks: 'throw',
