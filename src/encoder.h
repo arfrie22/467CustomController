@@ -16,11 +16,12 @@ struct encoder {
 
 typedef struct encoder encoder;
 
-void encoder_init(uint8_t rotary_encoder_A);
+void encoder_init(uint8_t rotary_encoder_A, int16_t min_value, int16_t max_value, int16_t initial_value);
 void encoder_set_rotation(int16_t _rotation);
 int16_t encoder_get_rotation();
+int16_t encoder_get_max();
+int16_t encoder_get_min();
 void inc_encoder();
 void dec_encoder();
-int16_t encoder_16_bit();
 
 #endif //ENCODER

@@ -71,8 +71,6 @@ int main(void) {
     tusb_init();
     ws2812_init();
     input_init();
-    encoder_init(20);
-    encoder_set_rotation(0);
 
     unsigned short l = 0;
     unsigned int t = 0;

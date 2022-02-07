@@ -6,20 +6,18 @@ static int16_t encoder_max = 255;
 
 static void pio_irq_handler() {
     // test if irq 0 was raised
-    if (pio0_hw->irq & 1)
-    {
-        if (rotation > encoder_min) rotation = rotation - 1;
+    if (pio0_hw->irq & 1) {
+        rotation -= 1;
     }
     // test if irq 1 was raised
-    if (pio0_hw->irq & 2)
-    {
-        if (rotation < encoder_max) rotation = rotation + 1;
+    if (pio0_hw->irq & 2) {
+        rotation += 1;
     }
     // clear both interrupts
     pio0_hw->irq = 3;
 }
 
-void encoder_init(uint8_t rotary_encoder_A) {
+void encoder_init(uint8_t rotary_encoder_A, int16_t min_value, int16_t max_value, int16_t initial_value) {
     uint8_t rotary_encoder_B = rotary_encoder_A + 1;
     // pio 0 is used
     PIO pio = pio0;
@@ -49,10 +47,18 @@ void encoder_init(uint8_t rotary_encoder_A) {
     pio_sm_init(pio, sm, 16, &c);
     // enable the sm
     pio_sm_set_enabled(pio, sm, true);
+
+    encoder_max = max_value;
+    encoder_min = min_value;
+    if (initial_value > encoder_max) initial_value = encoder_max;
+    if (initial_value < encoder_min) initial_value = encoder_max;
+    rotation = initial_value;
 }
 
 // set the current rotation to a specific value
 void encoder_set_rotation(int16_t _rotation) {
+    if (_rotation > encoder_max) _rotation = encoder_max;
+    if (_rotation < encoder_min) _rotation = encoder_max;
     rotation = _rotation;
 }
 
@@ -61,15 +67,18 @@ int16_t encoder_get_rotation() {
     return rotation;
 }
 
+int16_t encoder_get_max() {
+    return encoder_max;
+}
+
+int16_t encoder_get_min() {
+    return encoder_min;
+}
+
 void inc_encoder() {
     if (rotation < encoder_max) rotation += 1;
 }
 
 void dec_encoder() {
     if (rotation > encoder_min) rotation -= 1;
-}
-
-
-int16_t encoder_16_bit() {
-    return encode16BitValue(rotation, encoder_min, encoder_max, -32767, 32767);
 }

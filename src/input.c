@@ -21,7 +21,7 @@ static int16_t max(int16_t a, int16_t b) {
     return a < b ? b : a;
 }
 
-int16_t encode16BitValue(int16_t value, int16_t valueMinimum, int16_t valueMaximum, int16_t actualMinimum, int16_t actualMaximum) {
+int16_t encode_16_bit_value(int16_t value, int16_t valueMinimum, int16_t valueMaximum, int16_t actualMinimum, int16_t actualMaximum) {
     int16_t convertedValue;
     int16_t realMinimum = min(valueMinimum, valueMaximum);
     int16_t realMaximum = max(valueMinimum, valueMaximum);
@@ -153,6 +153,8 @@ static inline void init_pin(uint8_t pin) {
 void input_init() {
     init_pin(1);
     init_pin(2);
+
+    encoder_init(20, -255, 255, 0);
 }
 
 static inline bool pin_get(uint8_t pin) {
@@ -182,45 +184,45 @@ uint8_t get_hat_2() {
 }
 
 uint16_t get_x_axis() {
-    return encode16BitValue(1, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(encoder_get_rotation(), encoder_get_min(), encoder_get_max(), -32767, 32767);
 }
 
 uint16_t get_y_axis() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, 0, 8, -32767, 32767);
 }
 
 uint16_t get_z_axis() {
-    return encode16BitValue(-1, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(-1, -1, 1, -32767, 32767);
 }
 
 uint16_t get_rx_axis() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_ry_axis() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_rz_axis() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_rudder() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_throttle() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_accelerator() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_brake() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }
 
 uint16_t get_steering() {
-    return encode16BitValue(0, -1, 1,  -32767, 32767);
+    return encode_16_bit_value(0, -1, 1, -32767, 32767);
 }

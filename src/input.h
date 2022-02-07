@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <hardware/gpio.h>
+#include "encoder.h"
 
 #ifndef BUTTON_COUNT
 #define BUTTON_COUNT 0
