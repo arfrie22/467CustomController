@@ -3,5 +3,10 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib && git clone https://github.com/raspberrypi/pico-sdk --recurse-submodules && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DPICO_SDK_PATH=pico-sdk && cmake --build build --config Debug
-
+  - name: Debug Build
+  - init: |
+      sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+      git clone https://github.com/raspberrypi/pico-sdk --recurse-submodules
+    command:
+      cmake -B build -DCMAKE_BUILD_TYPE=Debug -DPICO_SDK_PATH=pico-sdk
+      cmake --build build --config Debug
