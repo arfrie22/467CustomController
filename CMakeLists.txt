@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.17)
 
 # Pull in SDK (must be before project)
+
+if(NOT(DEFINED ENV{PICO_SDK_PATH})) 
+        set(PICO_SDK_PATH ${CMAKE_CURRENT_LIST_DIR}/pico-sdk)
+endif ()
+
 include(pico_sdk_import.cmake)
 #include(${PICO_SDK_PATH}/tools/CMakeList.txt)
 
