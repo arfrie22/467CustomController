@@ -168,25 +168,25 @@ bool get_button(uint8_t button) {
         case 1:
             return pin_get(2);
         case 2:
-            return pin_get(2);
+            return pin_get(3);
         case 3:
-            return pin_get(2);
+            return pin_get(4);
         case 4:
-            return pin_get(2);
+            return pin_get(5);
         case 5:
-            return pin_get(2);
+            return pin_get(6);
         case 6:
-            return pin_get(2);
+            return pin_get(7);
         case 7:
-            return pin_get(2);
+            return pin_get(8);
         case 8:
-            return pin_get(2);
+            return pin_get(9);
         case 9:
-            return pin_get(2);
+            return pin_get(10);
         case 10:
-            return pin_get(2);
+            return pin_get(11);
         case 11:
-            return pin_get(2);
+            return pin_get(12);
         default:
             return 0;
     }
