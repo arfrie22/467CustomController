@@ -7,8 +7,9 @@
 #include "data_protocol.h"
 #include "generated/ws2812.pio.h"
 
-#define LED_COUNT 10
+#define LED_COUNT 12
 #define SECTION_COUNT 1
+#define PIN_TX 0
 
 void ws2812_init(void);
 

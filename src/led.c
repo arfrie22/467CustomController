@@ -60,8 +60,6 @@ static uint32_t hslToRGB(float h, float s, float l) {
 }
 
 
-#define PIN_TX 0
-
 uint8_t LED_RGB_BUFFER[LED_COUNT * 3] = {0x00};
 uint8_t LED_RGB_OUTPUT_BUFFER[LED_COUNT * 3] = {0x00};
 uint8_t LED_EFFECT_BUFFER[LED_COUNT * 3] = {0x00};
