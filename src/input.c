@@ -153,8 +153,18 @@ static inline void init_pin(uint8_t pin) {
 void input_init() {
     init_pin(1);
     init_pin(2);
+    init_pin(3);
+    init_pin(4);
+    init_pin(5);
+    init_pin(6);
+    init_pin(7);
+    init_pin(8);
+    init_pin(9);
+    init_pin(10);
+    init_pin(11);
+    init_pin(12);
 
-    encoder_init(20, -255, 255, 0);
+    // encoder_init(20, -255, 255, 0);
 }
 
 static inline bool pin_get(uint8_t pin) {
