@@ -4,8 +4,10 @@
 
 tasks:
   - name: Debug Build
-  - init: |
+  - before: |
       sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+      sudo rm -r pico-sdk
+      sudo rm -r build 
       git clone https://github.com/raspberrypi/pico-sdk --recurse-submodules
       cmake -B build -DCMAKE_BUILD_TYPE=Debug -DPICO_SDK_PATH=pico-sdk
       cmake --build build --config Debug
