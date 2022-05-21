@@ -1,13 +1,5 @@
 #include "input.h"
 
-#define BUTTON_1_PIN 0
-#define BUTTON_2_PIN 0
-#define BUTTON_3_PIN 0
-#define BUTTON_4_PIN 0
-#define BUTTON_5_PIN 0
-#define BUTTON_6_PIN 0
-#define BUTTON_7_PIN 0
-
 
 static long map(long x, long in_min, long in_max, long out_min, long out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -189,14 +181,6 @@ bool get_button(uint8_t button) {
             return pin_get(7);
         case 7:
             return pin_get(8);
-        case 8:
-            return pin_get(9);
-        case 9:
-            return pin_get(10);
-        case 10:
-            return pin_get(11);
-        case 11:
-            return pin_get(12);
         default:
             return 0;
     }

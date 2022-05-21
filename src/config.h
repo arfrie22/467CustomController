@@ -3,7 +3,7 @@
 #define CONFIG
 #define TEAM_NUMBER 467
 
-#define BUTTON_COUNT 12
+#define BUTTON_COUNT 8
 #define HAT_COUNT 0
 
 #define HAS_X_AXIS false

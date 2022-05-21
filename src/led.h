@@ -8,7 +8,7 @@
 #include "generated/ws2812.pio.h"
 
 #define LED_COUNT 42
-#define SECTION_COUNT 6
+#define SECTION_COUNT 8
 #define PIN_TX 0
 
 void ws2812_init(void);
